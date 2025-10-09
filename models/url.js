@@ -17,6 +17,10 @@ const urlSchema = new mongoose.Schema({
       },
     },
   ],
+  createdBy:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"users",
+  }
 });
 
 module.exports = mongoose.model('URL', urlSchema);

@@ -11,7 +11,9 @@ async function handleGenerateNewShortURL(req, res) {
     shortId: shortId, // ✅ fixed typo
     redirectURL: body.url,
     visitHistory: [],
+    createdBy:req._id,
   });
+  console.log(req._id);
 
   return res.render("home",{
     id:shortId

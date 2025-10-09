@@ -1,10 +1,12 @@
 const express = require('express');
 const { connectToMongoDB } = require('./connnect');
 const URL = require('./models/url');
+const {restrictToLoggedinUserOnly,checkAuth} = require('./middleware/auth');
 
 const StaticRoute = require('./routers/staticRouter');
 const urlRoute = require('./routers/url');
 const userRoute = require('./routers/user');
+const cookieParser = require('cookie-parser');
 
 const path = require("path")
 
@@ -16,14 +18,16 @@ connectToMongoDB('mongodb://localhost:27017/short-url')
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
+app.use(cookieParser());
+
 
 app.set('view engine',"ejs");
 app.set("views",path.resolve("./views"));
 
 
 
-app.use("/url", urlRoute);
-app.use("/",StaticRoute)
+app.use("/url", restrictToLoggedinUserOnly , urlRoute);
+app.use("/",checkAuth,StaticRoute)
 app.use('/user',userRoute);
 
 
